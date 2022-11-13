@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import UserItem from './UserItemComponent';
 
 interface IUser{
+    id:{
+        value:string
+    }
    name:{
     first: string,
-    second: string
-   } 
+    last: string
+   },
+   picture:{
+    medium:string,
+   }
 }
 const Main: React.FunctionComponent = () =>{
 
@@ -24,6 +31,15 @@ const Main: React.FunctionComponent = () =>{
         })
     }
 
+    function deleteUser(userIndex:number){
+        console.log(users)
+        setUsers(users.filter((user,index) => {
+            if(userIndex !== index){
+                return user
+            }
+        }))
+    }
+
     useEffect(()=>{
         fetchUserData();
     },[])
@@ -31,9 +47,16 @@ const Main: React.FunctionComponent = () =>{
 
     return (
     <div>
-        {users.map(user=>{
+        {users.map((user,index)=>{
             return(
-                <p>{user.name.first}</p>
+                <UserItem 
+                    key={user.id.value}
+                    fist={user.name.first} 
+                    last={user.name.last} 
+                    picture={user.picture.medium} 
+                    del={()=>{
+                        deleteUser(index)
+                    }}/>
             )
         })}
         <button onClick={fetchUserData}> fatch</button>
